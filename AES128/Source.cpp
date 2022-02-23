@@ -2,10 +2,11 @@
 #include <math.h>
 #include <sstream>
 #include <iomanip>
+#include <vector>
 
 using namespace std;
 
-void Create_S_Box(string a[][16])
+void Create_S_Box(string **a)
 {
 	string b[16][16] = { 
 		{"63","7c","77","7b","f2","6b","6f","c5","30","01","67","2b","fe","d7","ab","76"},
@@ -25,23 +26,55 @@ void Create_S_Box(string a[][16])
 		{"e1","f8","98","11","69","d9","8e","94","9b","1e","87","e9","ce","55","28","df"},
 		{"8c","a1","89","0d","Bf","e6","42","68","41","99","2d","0f","b0","54","bb","16"} };
 	
-	a = b;
 	for (int i = 0; i < 16; i++)
 	{
 		for (int j = 0; j < 16; j++)
-			cout << a[i][j] << " ";
-		cout << endl;
+			a[i][j] = b[i][j];
 	}
+	
 }
+string Check_S_Box(string a,string **S_Box)
+{
+	int r = 0, c = 0;
+	if ((int)a[0]-'0' == 97)
+		r = 10;
+	else if ((int)a[0] - '0' == 98)
+		r = 11;
+	else if ((int)a[0] - '0' == 99)
+		r = 12;
+	else if ((int)a[0] - '0' == 100)
+		r = 13;
+	else if ((int)a[0] - '0' == 101)
+		r = 14;
+	else if ((int)a[0] - '0' == 102)
+		r = 15;
+	else r = (int)a[0] - '0';
+	if ((int)a[1] - '0' == 97)
+		c = 10;
+	else if ((int)a[1] - '0' == 98)
+		c = 11;
+	else if ((int)a[1] - '0' == 99)
+		c = 12;
+	else if ((int)a[1] - '0' == 100)
+		c = 13;
+	else if ((int)a[1] - '0' == 101)
+		c = 14;
+	else if ((int)a[1] - '0' == 102)
+		c = 15;
+	else c = (int)a[1] - '0';
+	return S_Box[r][c];
 
+}
 int main()
 {
-	string S_Box[16][16];
+	string** S_Box = new string* [16];
+	for (int i = 0; i < 16; i++)
+		S_Box[i] = new string[16];
 	string result[16][16];
 	string x = "Thats my Kung Fu";
 	
-	//Create_S_Box(S_Box);
-
+	Create_S_Box(S_Box);
+	
 
 	/*-------------Convert String to hex------------*/
 	for (int i = 0; i < x.length(); ++i)
@@ -52,7 +85,14 @@ int main()
 		result[0][i] = ss.str();
 	}
 	/*-----------------------------------------------*/
+	cout << Check_S_Box(result[0][0], S_Box);
 
+
+
+
+	for (int i = 0; i < 16; i++)
+		delete[]S_Box[i];
+	delete[]S_Box;
 
 	return 0;
 }
