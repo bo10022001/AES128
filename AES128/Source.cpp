@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
-
+#include <bitset>
 using namespace std;
 
 void Create_S_Box(string **a)
@@ -65,34 +65,63 @@ string Check_S_Box(string a,string **S_Box)
 	return S_Box[r][c];
 
 }
-int main()
+string* StringToHex(string* a,int n, string x)
 {
-	string** S_Box = new string* [16];
-	for (int i = 0; i < 16; i++)
-		S_Box[i] = new string[16];
-	string result[16][16];
-	string x = "Thats my Kung Fu";
-	
-	Create_S_Box(S_Box);
-	
-
-	/*-------------Convert String to hex------------*/
 	for (int i = 0; i < x.length(); ++i)
 	{
 		std::stringstream ss;
 		ss << std::hex << std::setfill('0');
 		ss << setw(2) << static_cast<unsigned>(x[i]);
-		result[0][i] = ss.str();
+		a[i] = ss.str();
 	}
+	return a;
+}
+string StringToBinary(string a)
+{
+	string result;
+	for (std::size_t i = 0; i < a.size(); ++i)
+	{
+		result+= bitset<8>(a.c_str()[i]).to_string();
+	}
+	return result;
+}
+void RotateLeft(string *a,int n)
+{
+	string s;
+	string temp;
+	for (int i = n; i < n + 4; i++)
+	{
+		temp = a[i];
+		s += StringToBinary(temp);
+	}
+}
+int main()
+{
+	string** S_Box = new string* [16];
+	for (int i = 0; i < 16; i++)
+		S_Box[i] = new string[16];
+
+	string** result = new string*[16] ;
+	for (int i = 0; i < 16; i++)
+		result[i] = new string[16];
+	string x = "Thats my Kung Fu";
+	
+	Create_S_Box(S_Box);
+	
+	
+	/*-------------Convert String to hex------------*/
+	result[0] = StringToHex(result[0],16, x);
 	/*-----------------------------------------------*/
-	cout << Check_S_Box(result[0][0], S_Box);
-
-
-
+	
+	RotateLeft(result[0], 4);
+	//cout << Check_S_Box(result[0][0], S_Box);
 
 	for (int i = 0; i < 16; i++)
 		delete[]S_Box[i];
 	delete[]S_Box;
+	for (int i = 0; i < 16; i++)
+		delete[]result[i];
+	delete[]result;
 
 	return 0;
 }
