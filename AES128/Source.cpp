@@ -70,29 +70,160 @@ string* StringToHex(string* a,int n, string x)
 	for (int i = 0; i < x.length(); ++i)
 	{
 		std::stringstream ss;
-		ss << std::hex << std::setfill('0');
+		ss << hex << setfill('0');
 		ss << setw(2) << static_cast<unsigned>(x[i]);
 		a[i] = ss.str();
 	}
 	return a;
 }
-string StringToBinary(string a)
+string HexStringToBinary(string a)
 {
 	string result;
-	for (std::size_t i = 0; i < a.size(); ++i)
-	{
-		result+= bitset<8>(a.c_str()[i]).to_string();
+	long int i = 0;
+	while (a[i]) {
+		switch (a[i]) {
+		case '0':
+			result+= "0000";
+			break;
+		case '1':
+			result += "0001";
+			break;
+		case '2':
+			result += "0010";
+			break;
+		case '3':
+			result += "0011";
+			break;
+		case '4':
+			result += "0100";
+			break;
+		case '5':
+			result += "0101";
+			break;
+		case '6':
+			result += "0110";
+			break;
+		case '7':
+			result += "0111";
+			break;
+		case '8':
+			result += "1000";
+			break;
+		case '9':
+			result += "1001";
+			break;
+		case 'A':
+		case 'a':
+			result += "1010";
+			break;
+		case 'B':
+		case 'b':
+			result += "1011";
+			break;
+		case 'C':
+		case 'c':
+			result += "1100";
+			break;
+		case 'D':
+		case 'd':
+			result += "1101";
+			break;
+		case 'E':
+		case 'e':
+			result += "1110";
+			break;
+		case 'F':
+		case 'f':
+			result += "1111";
+			break;
+		default:
+			cout << "\please enter valid hexadecimal digit " << a[i];
+		}
+		i++;
 	}
 	return result;
 }
-void RotateLeft(string *a,int n)
+string BinaryStringToHex(string a)
+{
+	string result="";
+	int j = 0;
+	for (int i = 0; i < 2; i++)
+	{
+		string temp = a.substr(j, 4);
+		if (temp == "0000")
+			result += "0";
+
+		if (temp == "0001")
+			result += "1";
+
+		if (temp == "0010")
+			result += "2";
+
+		if (temp == "0011")
+			result += "3";
+
+		if (temp == "0100")
+			result += "4";
+
+		if (temp == "0101")
+			result += "5";
+
+		if (temp == "0110")
+			result += "6";
+
+		if (temp == "0111")
+			result += "7";
+
+		if (temp == "1000")
+			result += "8";
+
+		if (temp == "1001")
+			result += "9";
+
+		if (temp == "1010")
+			result += "a";
+
+		if (temp == "1011")
+			result += "b";
+
+		if (temp == "1100")
+			result += "c";
+
+		if (temp == "1101")
+			result += "d";
+
+		if (temp == "1110")
+			result += "e";
+
+		if (temp == "1111")
+			result += "f";
+
+		j += 4;
+	}
+	return result;
+}
+void RotateLeft8(string *a,int n)
 {
 	string s;
 	string temp;
 	for (int i = n; i < n + 4; i++)
 	{
 		temp = a[i];
-		s += StringToBinary(temp);
+		s = HexStringToBinary(temp) + s;
+	}
+	for (int j = 0; j < 8; j++)
+	{
+		char temp1 = s[0];
+		for (int i = 0; i < s.length() - 1; i++)
+			s[i] = s[i + 1];
+		s[s.length() - 1] = temp1;
+	}
+	for (int i = 0; i < s.length(); i += 8)
+	{
+		temp = s.substr(i, 8);
+		a[n] = BinaryStringToHex(temp);
+		cout << a[n]<<" ";
+		n++;
 	}
 }
 int main()
@@ -113,7 +244,7 @@ int main()
 	result[0] = StringToHex(result[0],16, x);
 	/*-----------------------------------------------*/
 	
-	RotateLeft(result[0], 4);
+	RotateLeft8(result[0], 4);
 	//cout << Check_S_Box(result[0][0], S_Box);
 
 	for (int i = 0; i < 16; i++)
