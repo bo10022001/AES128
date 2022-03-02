@@ -36,30 +36,30 @@ void Create_S_Box(string **a)
 string Check_S_Box(string a,string **S_Box)
 {
 	int r = 0, c = 0;
-	if ((int)a[0]-'0' == 97)
+	if ((int)a[0] == 97)
 		r = 10;
-	else if ((int)a[0] - '0' == 98)
+	else if ((int)a[0] == 98)
 		r = 11;
-	else if ((int)a[0] - '0' == 99)
+	else if ((int)a[0] == 99)
 		r = 12;
-	else if ((int)a[0] - '0' == 100)
+	else if ((int)a[0] == 100)
 		r = 13;
-	else if ((int)a[0] - '0' == 101)
+	else if ((int)a[0] == 101)
 		r = 14;
-	else if ((int)a[0] - '0' == 102)
+	else if ((int)a[0] == 102)
 		r = 15;
 	else r = (int)a[0] - '0';
-	if ((int)a[1] - '0' == 97)
+	if ((int)a[1] == 97)
 		c = 10;
-	else if ((int)a[1] - '0' == 98)
+	else if ((int)a[1] == 98)
 		c = 11;
-	else if ((int)a[1] - '0' == 99)
+	else if ((int)a[1] == 99)
 		c = 12;
-	else if ((int)a[1] - '0' == 100)
+	else if ((int)a[1] == 100)
 		c = 13;
-	else if ((int)a[1] - '0' == 101)
+	else if ((int)a[1] == 101)
 		c = 14;
-	else if ((int)a[1] - '0' == 102)
+	else if ((int)a[1] == 102)
 		c = 15;
 	else c = (int)a[1] - '0';
 	return S_Box[r][c];
@@ -226,6 +226,15 @@ void RotateLeft8(string *a,int n)
 		n++;
 	}
 }
+void state1(string* a, string** S_Box, int n)
+{
+	for (int i = n; i < n + 4; i++)
+	{
+		a[i] = Check_S_Box(a[i],S_Box);
+		cout << a[i] << " ";
+	}
+
+}
 int main()
 {
 	string** S_Box = new string* [16];
@@ -245,7 +254,10 @@ int main()
 	/*-----------------------------------------------*/
 	
 	RotateLeft8(result[0], 4);
-	//cout << Check_S_Box(result[0][0], S_Box);
+	cout << endl;
+	state1(result[0], S_Box, 4);
+	
+	//cout << Check_S_Box("ab", S_Box);
 
 	for (int i = 0; i < 16; i++)
 		delete[]S_Box[i];
